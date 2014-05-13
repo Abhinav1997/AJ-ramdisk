@@ -46,8 +46,8 @@ if [ -s /dev/keycheck ] || busybox grep -q warmboot=0x5502 /proc/cmdline; then
 
 	##Handle multiple recovery ramdisks based on keypress
 	# Thanks a lot to the great DooMLoRD
-	# default recovery ramdisk is CWM 
-	load_image=/sbin/ramdisk-recovery-cwm.cpio
+	# default recovery ramdisk is PhilZ 
+	load_image=/sbin/ramdisk-recovery-philz.cpio
 
 	if [ -s /dev/keycheck ]
 	then
@@ -61,8 +61,8 @@ if [ -s /dev/keycheck ] || busybox grep -q warmboot=0x5502 /proc/cmdline; then
 
 		if [ -n "$VOLUKEYCHECK" ]
 		then
-			#load cwm ramdisk		
-			load_image=/sbin/ramdisk-recovery-cwm.cpio
+			#load philz ramdisk		
+			load_image=/sbin/ramdisk-recovery-philz.cpio
 		fi
 
 		if [ -n "$VOLDKEYCHECK" ]
