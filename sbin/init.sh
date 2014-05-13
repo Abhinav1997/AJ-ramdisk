@@ -43,7 +43,34 @@ load_image=/sbin/ramdisk.cpio
 if [ -s /dev/keycheck ] || busybox grep -q warmboot=0x5502 /proc/cmdline; then
 	busybox echo 'RECOVERY BOOT' >>boot.txt
 	# recovery ramdisk
-	load_image=/sbin/ramdisk-recovery.cpio
+
+	##Handle multiple recovery ramdisks based on keypress
+	# Thanks a lot to the great DooMLoRD
+	# default recovery ramdisk is CWM 
+	load_image=/sbin/ramdisk-recovery-cwm.cpio
+
+	if [ -s /dev/keycheck ]
+	then
+		busybox hexdump < /dev/keycheck > /dev/keycheck1
+
+		export VOLUKEYCHECK=`busybox cat /dev/keycheck1 | busybox grep '0001 0073'`
+		export VOLDKEYCHECK=`busybox cat /dev/keycheck1 | busybox grep '0001 0072'`
+
+		busybox rm /dev/keycheck
+		busybox rm /dev/keycheck1
+
+		if [ -n "$VOLUKEYCHECK" ]
+		then
+			#load cwm ramdisk		
+			load_image=/sbin/ramdisk-recovery-cwm.cpio
+		fi
+
+		if [ -n "$VOLDKEYCHECK" ]
+		then
+			#load twrp ramdisk
+			load_image=/sbin/ramdisk-recovery-twrp.cpio
+		fi
+	fi
 else
 	busybox echo 'ANDROID BOOT' >>boot.txt
 fi
